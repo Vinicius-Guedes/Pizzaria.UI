@@ -10,7 +10,7 @@ var Pizza = {
     },
 
     Listar: function () {
-        $('#tabela-body').html('<tr><td colspan="5" class="loading">Carregando...</td></tr>');
+        $('#tabela-body').html('<tr><td colspan="6" class="loading">Carregando...</td></tr>');
 
         $.ajax({
             url: Config.API_URL + "/pizzas",
@@ -23,6 +23,7 @@ var Pizza = {
                     html += '<td>' + pizza.nome + '</td>';
                     html += '<td>' + pizza.descricao + '</td>';
                     html += '<td>R$ ' + parseFloat(pizza.preco).toFixed(2) + '</td>';
+                    html += '<td>R$ ' + parseFloat(pizza.custo).toFixed(2) + '</td>';
                     html += '<td>';
                     html += '<button class="btn btn-sm btn-warning me-1" onclick="Pizza.Editar(' + pizza.id + ')"><i class="bi bi-pencil"></i> Editar</button>';
                     html += '<button class="btn btn-sm btn-danger" onclick="Pizza.Excluir(' + pizza.id + ')"><i class="bi bi-trash"></i> Excluir</button>';
@@ -30,12 +31,12 @@ var Pizza = {
                     html += '</tr>';
                 });
                 if (html === '') {
-                    html = '<tr><td colspan="5" class="text-center text-muted">Nenhuma pizza cadastrada</td></tr>';
+                    html = '<tr><td colspan="6" class="text-center text-muted">Nenhuma pizza cadastrada</td></tr>';
                 }
                 $('#tabela-body').html(html);
             },
             error: function () {
-                $('#tabela-body').html('<tr><td colspan="5" class="text-center text-danger">Erro ao carregar pizzas</td></tr>');
+                $('#tabela-body').html('<tr><td colspan="6" class="text-center text-danger">Erro ao carregar pizzas</td></tr>');
             }
         });
     },
@@ -52,10 +53,11 @@ var Pizza = {
         var pizza = {
             nome: $('#nome').val(),
             descricao: $('#descricao').val(),
-            preco: parseFloat($('#preco').val())
+            preco: parseFloat($('#preco').val()),
+            custo: parseFloat($('#custo').val())
         };
 
-        if (!pizza.nome || !pizza.descricao || isNaN(pizza.preco)) {
+        if (!pizza.nome || !pizza.descricao || isNaN(pizza.preco) || isNaN(pizza.custo)) {
             alert('Preencha todos os campos corretamente!');
             return;
         }
@@ -100,6 +102,7 @@ var Pizza = {
                 $('#nome').val(pizza.nome);
                 $('#descricao').val(pizza.descricao);
                 $('#preco').val(pizza.preco);
+                $('#custo').val(pizza.custo);
                 $('#modalPizzaLabel').text('Editar Pizza');
                 $('#modalPizza').modal('show');
             }
